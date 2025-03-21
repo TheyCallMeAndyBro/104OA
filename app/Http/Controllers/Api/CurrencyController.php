@@ -11,8 +11,8 @@ class CurrencyController extends Controller
     public function convert(Request $request)
     {
         $request->validate([
-            'from_currency' => 'string|required',
-            'to_currency' => 'string|required',
+            'from_currency' => 'required|string|in:TWD,USD,JPY',
+            'to_currency' => 'required|string|in:TWD,USD,JPY',
             'amount' => 'numeric|required',
         ]);
 
