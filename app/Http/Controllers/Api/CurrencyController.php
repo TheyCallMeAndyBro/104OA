@@ -9,20 +9,20 @@ use Illuminate\Http\Request;
 class CurrencyController extends Controller
 {
     public function convert(Request $request)
-    {   
+    {
         $request->validate([
             'from_currency' => 'string|required',
             'to_currency' => 'string|required',
             'amount' => 'numeric|required',
         ]);
-        
+
         $from_currency = $request->input('from_currency');
         $to_currency = $request->input('to_currency');
         $amount = $request->input('amount');
-        
+
         $exchange_rate = $this->getExchangeRate($from_currency, $to_currency);
         $converted_amount = $amount * $exchange_rate;
-        
+
         $data = [
             'from_currency' => $from_currency,
             'to_currency' => $to_currency,
@@ -30,7 +30,7 @@ class CurrencyController extends Controller
             'converted_amount' => $converted_amount,
             'rate' => $exchange_rate,
         ];
-        
+
         return response()->json(new CurrencyResource($data));
     }
 
@@ -40,10 +40,9 @@ class CurrencyController extends Controller
         $exchangeRates = [
             'USD' => ['rates' => ['USD' => 1.0000, 'TWD' => 31.5000, 'JPY' => 148.5000]],
             'TWD' => ['rates' => ['USD' => 0.0317, 'TWD' => 1.0000, 'JPY' => 4.7143]],
-            'JPY' => ['rates' => ['USD' => 0.00673, 'TWD' => 0.2121, 'JPY' => 1.0000]]
+            'JPY' => ['rates' => ['USD' => 0.00673, 'TWD' => 0.2121, 'JPY' => 1.0000]],
         ];
 
         return $exchangeRates[$from_currency]['rates'][$to_currency];
     }
-
 }
